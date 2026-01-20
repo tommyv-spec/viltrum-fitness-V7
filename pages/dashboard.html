@@ -683,21 +683,23 @@
           </div>
         </a>
 
-        <!-- Aerobic -->
-        <div class="section-card disabled" onclick="showComingSoon('Aerobic')">
+        <!-- Endurance / Running -->
+        <a href="endurance.html" class="section-card" id="endurance-card">
           <div class="card-header">
             <div class="card-icon">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M22 12h-4l-3 9L9 3l-3 9H2"/>
+                <path d="M13 4v16M13 4l4 4M13 4l-4 4"/>
+                <circle cx="7" cy="17" r="3"/>
+                <circle cx="17" cy="17" r="3"/>
               </svg>
             </div>
-            <span class="status-badge coming-soon">Coming Soon</span>
+            <span class="status-badge active" id="endurance-badge">Attivo</span>
           </div>
           <div class="card-content">
-            <h2>AEROBIC</h2>
-            <p>Cardio training e resistenza</p>
+            <h2>ENDURANCE</h2>
+            <p>Running e cardio training</p>
           </div>
-        </div>
+        </a>
 
       </div>
     </main>
@@ -1409,6 +1411,49 @@
     
     // Load on page load
     document.addEventListener('DOMContentLoaded', loadWorkoutHistory);
+    
+    // ===== CHECK FOR RUN WORKOUTS =====
+    async function checkEnduranceAvailability() {
+      const enduranceCard = document.getElementById('endurance-card');
+      const enduranceBadge = document.getElementById('endurance-badge');
+      
+      if (!enduranceCard) return;
+      
+      try {
+        // Check session cache for runWorkouts
+        const cached = sessionStorage.getItem('viltrum_session_data');
+        if (cached) {
+          const data = JSON.parse(cached);
+          const runWorkouts = data.runWorkouts || {};
+          const hasRunWorkouts = Object.keys(runWorkouts).length > 0;
+          
+          if (hasRunWorkouts) {
+            console.log('🏃 Run workouts available:', Object.keys(runWorkouts).length);
+            enduranceCard.classList.remove('disabled');
+            enduranceBadge.textContent = 'Attivo';
+            enduranceBadge.className = 'status-badge active';
+          } else {
+            console.log('⏳ No run workouts yet');
+            enduranceCard.classList.add('disabled');
+            enduranceCard.href = '#';
+            enduranceCard.onclick = (e) => {
+              e.preventDefault();
+              showComingSoon('Endurance');
+            };
+            enduranceBadge.textContent = 'Coming Soon';
+            enduranceBadge.className = 'status-badge coming-soon';
+          }
+        }
+      } catch (error) {
+        console.warn('Could not check endurance availability:', error);
+      }
+    }
+    
+    // Check endurance availability when cache is ready
+    document.addEventListener('DOMContentLoaded', () => {
+      // Wait a bit for session cache to be available
+      setTimeout(checkEnduranceAvailability, 500);
+    });
 
     // ===== LOAD LOGO FROM CACHE =====
     document.addEventListener('DOMContentLoaded', async () => {
