@@ -11,7 +11,8 @@ class NutritionEngine {
 
   async init() {
     try {
-      const response = await fetch('food-database.json');
+      // Fix path - page is in /pages/ so we need to go up one level
+      const response = await fetch('../food-database.json');
       this.foodDatabase = await response.json();
       this.initialized = true;
       console.log('✅ Nutrition Engine initialized');
