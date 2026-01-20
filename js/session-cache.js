@@ -86,7 +86,9 @@ const SessionCache = {
         allWorkoutsData: data.workouts || {},
         // Nutrition data
         nutritionPdfUrl: null,
-        nutritionScadenza: null
+        nutritionScadenza: null,
+        // Run workouts data
+        runWorkouts: data.runWorkouts || {}
       };
     }
     
@@ -98,7 +100,9 @@ const SessionCache = {
       allWorkoutsData: data.workouts || {},
       // Nutrition data from Google Sheets
       nutritionPdfUrl: userInfo.nutritionPdfUrl || null,
-      nutritionScadenza: userInfo.nutritionScadenza || null
+      nutritionScadenza: userInfo.nutritionScadenza || null,
+      // Run workouts data (available to all users for now)
+      runWorkouts: data.runWorkouts || {}
     };
   },
   
